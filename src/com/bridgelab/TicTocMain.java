@@ -6,6 +6,6 @@ public class TicTocMain {
         TicTacToe game = new TicTacToe();
         game.Board();
         game.selectOption();
-        game.showBoard();
+        game.selectLocation();
     }
 }
