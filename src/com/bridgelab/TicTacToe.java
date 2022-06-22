@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 public class TicTacToe {
     Scanner input = new Scanner(System.in);
+    int count = 0;
     char userLetter, computerLetter;
     char[] index = new char[10];
 
@@ -52,7 +53,9 @@ public class TicTacToe {
         for (int i = 0; i < index.length; i++) {
             if (userMove == i && index[i] == ' ') {
                 index[i] = userLetter;
+                count++;
                 showBoard();
+                checkNextMove(turn);
                 break;
             } else if (userMove == i && index[i] != ' ') {
                 System.out.println("Location already used");
@@ -68,7 +71,9 @@ public class TicTacToe {
         for (int i = 0; i < index.length; i++) {
             if (pos == i && index[i] == ' ') {
                 index[i] = computerLetter;
+                count++;
                 showBoard();
+                checkNextMove(turn);
                 break;
             } else if (pos == i && index[i] != ' ') {
                 //   System.out.println("Location already used");
@@ -76,6 +81,41 @@ public class TicTacToe {
             }
         }
         selectLocation(userLetter);
+    }
+    public void checkNextMove(char turn) {
+        for (int i = 1; i < 8; i = i + 3) {
+            if (index[i] == turn && index[i + 1] == turn && index[i + 2] == turn) {
+                System.out.println("winner is " + turn);
+                System.exit(0);
+            }
+        }
+
+        for (int i = 1; i < 4; i = i + 1) {
+            if (index[i] == turn && index[i + 3] == turn && index[i + 6] == turn) {
+                System.out.println("winner is " + turn);
+                System.exit(0);
+            }
+        }
+
+        if (index[1] == turn && index[5] == turn && index[9] == turn) {
+            System.out.println("winner is " + turn);
+            System.exit(0);
+        } else if (index[3] == turn && index[5] == turn && index[7] == turn) {
+            System.out.println("winner is " + turn);
+            System.exit(0);
+        } else {
+            for (int i = 1; i < index.length; i++) {
+                if (index[i] == ' ') {
+                    selectLocation((turn == computerLetter) ? userLetter : computerLetter);
+                }
+                if (count == 9) {
+                    System.out.println("draw and Thank you");
+                    System.exit(0);
+                }
+            }
+
+        }
+
     }
 
 }
