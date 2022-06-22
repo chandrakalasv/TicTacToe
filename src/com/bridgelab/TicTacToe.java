@@ -1,5 +1,6 @@
 package com.bridgelab;
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class TicTacToe {
@@ -26,21 +27,27 @@ public class TicTacToe {
         System.out.println("User Letter: " + userLetter + ", " + "Computer Letter: " + computerLetter);
     }
 
-    public void selectLocation() {
-        char userChoice;
-        do {
-        System.out.println("select location from 1-9");
-        int userMove = input.nextInt();
-        selectLocationRec(userMove);
-        System.out.println("Wish to insert again: Y?N");
-        userChoice = input.next().toUpperCase().charAt(0);
-        } while(userChoice == 'Y');
+    public char selectPlayer() {
+        int coinFlip = (int) ((Math.random() * 10) % 2);
+        char player = (coinFlip == 1) ? userLetter : computerLetter;
+        System.out.println("Starting Player is " + player);
+        return player;
     }
 
-    public void selectLocationRec(int userMove) {
+    public void selectLocation(char turn) {
+        if (turn == computerLetter) {
+            System.out.println("computer turn to play");
+            computerTurn(turn);
+        }
+        System.out.println("select location from 1-9");
+        int userMove = input.nextInt();
+        userTurn(userMove, turn);
+    }
+
+    public void userTurn(int userMove, char turn) {
         if (userMove > index.length - 1) {
             System.out.println("Enter correct location");
-            selectLocation();
+            userTurn(userMove, turn);
         }
         for (int i = 0; i < index.length; i++) {
             if (userMove == i && index[i] == ' ') {
@@ -49,8 +56,26 @@ public class TicTacToe {
                 break;
             } else if (userMove == i && index[i] != ' ') {
                 System.out.println("Location already used");
-                selectLocation();
+                selectLocation(turn);
             }
         }
+        selectLocation(computerLetter);
     }
+
+    public void computerTurn(char turn) {
+        Random rand = new Random();
+        int pos = rand.nextInt(9) + 1;
+        for (int i = 0; i < index.length; i++) {
+            if (pos == i && index[i] == ' ') {
+                index[i] = computerLetter;
+                showBoard();
+                break;
+            } else if (pos == i && index[i] != ' ') {
+                //   System.out.println("Location already used");
+                computerTurn(turn);
+            }
+        }
+        selectLocation(userLetter);
+    }
+
 }
